@@ -31,5 +31,7 @@ public interface TitleRepository extends JpaRepository<Title, Long> {
 
 	List<Title> findByGenreAndTypeAndYear(String genre, TitleType type, int year);
 
+	List<Title> findByType(TitleType movie);
+
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.domain.Title;
+import app.enums.TitleType;
 import app.services.TitleService;
 import app.util.DateUtil;
 /**
@@ -140,7 +141,10 @@ public class JsonToDbController {
                 }
                 if(!jsonObject.isNull( "type" ))
                 {
-                title.setTitle(jsonObject.getString("type"));
+                	if(jsonObject.getString("type").equals(TitleType.MOVIE.toString()))
+                title.setType(TitleType.MOVIE);
+                	if(jsonObject.getString("type").equals(TitleType.SERIES.toString()))
+                title.setType(TitleType.SERIES);
                 }
                 title.setRating(0);
              titleService.saveTitle(title);

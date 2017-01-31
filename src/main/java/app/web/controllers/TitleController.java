@@ -78,7 +78,11 @@ public class TitleController {
         title.setMetascore(Integer.parseInt(reqPar.get("metascore")));
         title.setImdbRating(Float.parseFloat(reqPar.get("imdbrating")));
         title.setImdbVotes(Long.parseLong(reqPar.get("imdbvote")));
-        title.setTitle(reqPar.get("type"));
+        title.setTitle(reqPar.get("title"));
+        if(reqPar.get("type").equals(TitleType.MOVIE.toString()))
+            title.setType(TitleType.MOVIE);
+            	if(reqPar.get("type").equals(TitleType.SERIES.toString()))
+            title.setType(TitleType.SERIES);
         title.setRating(0);
         
         titleService.saveTitle(title);
@@ -116,8 +120,11 @@ public class TitleController {
      title.setMetascore(Integer.parseInt(reqPar.get("metascore")));
      title.setImdbRating(Float.parseFloat(reqPar.get("imdbrating")));
      title.setImdbVotes(Long.parseLong(reqPar.get("imdbvote")));
-     title.setTitle(reqPar.get("type"));
-     
+     title.setTitle(reqPar.get("title"));
+     if(reqPar.get("type").equals(TitleType.MOVIE.toString()))
+         title.setType(TitleType.MOVIE);
+         	if(reqPar.get("type").equals(TitleType.SERIES.toString()))
+         title.setType(TitleType.SERIES);
      titleService.saveTitle(title);
      log.debug("title update end"+title);
      }
@@ -161,7 +168,46 @@ p.setPage(5);
    p.setSource(titleList);
 return p;
 }
+@RequestMapping( value = "/movies",method = RequestMethod.GET)
+public PagedListHolder<Title> listAllTopMovies(@RequestHeader String userId)  {
+PagedListHolder<Title> p = new PagedListHolder<Title>();
+p.setPage(5);
 
+	Long userID=Long.parseLong(userId);
+   userService.validateUser(userID);
+   User user=userService.getUserById(userID);
+   log.debug("title list start");
+   List<Title> titleList = new ArrayList<Title>();
+   if(user.getUserType().equals(UserType.USER))
+   {
+	   titleList=   titleService.listAllMovies(TitleType.MOVIE);
+	   titleList.sort(Comparator.comparing(a -> a.getYear()));
+	 
+  
+   }
+   p.setSource(titleList);
+return p;
+}
+@RequestMapping(value = "/series", method = RequestMethod.GET)
+public PagedListHolder<Title> listAllTitleTopSeries(@RequestHeader String userId)  {
+PagedListHolder<Title> p = new PagedListHolder<Title>();
+p.setPage(5);
+
+	Long userID=Long.parseLong(userId);
+   userService.validateUser(userID);
+   User user=userService.getUserById(userID);
+   log.debug("title list start");
+   List<Title> titleList = new ArrayList<Title>();
+   if(user.getUserType().equals(UserType.USER))
+   {
+	   titleList=   titleService.listAllSeries(TitleType.SERIES);
+	   titleList.sort(Comparator.comparing(a -> a.getYear()));
+	 
+  
+   }
+   p.setSource(titleList);
+return p;
+}
 @RequestMapping(value = "/imdbrating", method = RequestMethod.GET)
 public PagedListHolder<Title> listAllTitleImdbRating(@RequestHeader String userId)  {
 PagedListHolder<Title> p = new PagedListHolder<Title>();

@@ -1,5 +1,7 @@
 package app.services;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,5 +71,22 @@ public class TitleServiceImpl implements TitleService {
 			              .map(Title::getGenre)
 			              .collect(Collectors.toList());
 	}
+
+	@Override
+	public List<Title> listAllMovies(TitleType movie) {
+		List<Title> result=titleRepository.findByType(movie);
+		result.sort(Comparator.comparing(a -> a.getImdbRating()));
+		return result;
+	}
+
+	@Override
+	public List<Title> listAllSeries(TitleType series) {
+		
+		List<Title> result=titleRepository.findByType(series);
+		result.sort(Comparator.comparing(a -> a.getImdbRating()));
+		return result;
+	}
+
+	
 	
 }

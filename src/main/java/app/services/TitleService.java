@@ -28,4 +28,10 @@ public interface TitleService {
 	List<Integer> findDistinctYear();
 
 	List<String> findDistinctGenre();
+
+
+
+	List<Title> listAllMovies(TitleType movie);
+
+	List<Title> listAllSeries(TitleType series);
 }
